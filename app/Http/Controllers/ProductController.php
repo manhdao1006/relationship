@@ -66,8 +66,8 @@ class ProductController extends Controller
     
             return redirect()->route('products.index');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
-            // return back()->with('error', $th->getMessage());
+            // dd($th->getMessage());
+            return back()->with('error', $th->getMessage());
         }
     }
 
@@ -100,6 +100,32 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        try {
+            DB::transaction(function () use ($product) {
+                $product->tags()->sync([]);
+
+                // Delete image in Gallery
+                $galleries = $product->galleries;
+                foreach ($galleries as $item) {
+                    if ($item->image_path && Storage::exists($item->image_path)) {
+                        Storage::delete($item->image_path);
+                    }
+                    $item->delete();
+                }
+
+                $product->galleries()->delete();
+
+                $product->delete();
+            });
+
+            if ($product->image_path && Storage::exists($product->image_path)) {
+                Storage::delete($product->image_path);
+            }
+    
+            return redirect()->route('products.index')->with('success', 'Successfully!');
+        } catch (\Throwable $th) {
+            // dd($th->getMessage());
+            return back()->with('error', $th->getMessage());
+        }
     }
 }

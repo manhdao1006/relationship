@@ -7,6 +7,10 @@
 @section('content')
     <a href="{{ route('products.create') }}" class="btn btn-info mt-3">Create a New Product</a>
 
+    @if (session()->has('success'))
+        <div class="alert alert-success">{{ session()->get('success') }}</div>
+    @endif
+
     <table class="table">
         <tr>
             <th>ID</th>
@@ -41,7 +45,7 @@
                         @csrf
                         @method('DELETE')
 
-                        <button type="submit" onclick="return cofirm('Are you sure?')" class="btn btn-danger mt-3">Delete</button>
+                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger mt-3">Delete</button>
 
                     </form>
                 </td>
