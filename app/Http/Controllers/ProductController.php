@@ -84,7 +84,13 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $product->load(['category', 'tags', 'galleries']);
+        $productTags = $product->tags->pluck('id')->all();
+
+        $categories = Category::pluck('name', 'id')->all();
+        $tags = Tag::pluck('name', 'id')->all();
+
+        return view('products.edit', compact('categories', 'tags', 'product', 'productTags'));
     }
 
     /**
@@ -92,7 +98,36 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        try {
+            DB::transaction(function () use ($request, $product) {
+                $dataProduct = [
+                    "category_id"   => $request->category_id,
+                    "name"          => $request->name,
+                    "price"         => $request->price,
+                    "description"   => $request->description,
+                ];
+    
+                if ($request->hasFile('image_path')) {
+                    $dataProduct['image_path'] = Storage::put('products', $request->file('image_path'));
+                }
+    
+                $product->update($dataProduct);
+    
+                foreach ($request->galleries ?? [] as $id => $image) {
+                    $gallery = Gallery::query()->findOrFail($id);
+                    $gallery->update([
+                        'image_path' => Storage::put('galleries', $image),
+                    ]);
+                }
+    
+                $product->tags()->sync($request->tags);
+            });
+    
+            return back()->with('success', 'Successfully!');
+        } catch (\Throwable $th) {
+            // dd($th->getMessage());
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**

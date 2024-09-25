@@ -6,6 +6,10 @@
 
 @section('content')
 
+    @if (session()->has('error'))
+        <div class="alert alert-danger">{{ session()->get('error') }}</div>
+    @endif
+
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -36,7 +40,7 @@
         <input type="number" name="price" id="price" class="form-control" value="{{ old('price') }}">
 
         <label for="description" class="mt-3">Description</label>
-        <textarea name="description" id="description" class="form-control"></textarea>
+        <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
 
         <label for="tags" class="mt-3">Tags</label>
         <select name="tags[]" id="tags" multiple class="form-control">
