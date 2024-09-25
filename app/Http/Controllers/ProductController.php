@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Product::with(['category', 'tags'])->latest('id')->paginate(5);
+        $data = Product::with(['category', 'tags'])->latest('id')->paginate(1);
 
         return view('products.index', compact('data'));
     }

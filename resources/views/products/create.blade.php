@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-    Thêm mới
+    Create a New Product
 @endsection
 
 @section('content')
