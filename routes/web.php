@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\PodcastProcessed;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
+    event(new PodcastProcessed('Hello'));
+
     return view('welcome');
 });
 
