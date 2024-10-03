@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\PodcastProcessed;
-use App\Listeners\SendPhonePodcastNotification;
-use App\Listeners\SendPodcastNotification;
+use App\Events\OrderSuccess;
+use App\Listeners\OrderSuccessNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,10 +21,9 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        PodcastProcessed::class => [
-            SendPodcastNotification::class,
-            SendPhonePodcastNotification::class,
-        ]
+        OrderSuccess::class => [
+            OrderSuccessNotification::class,
+        ],
     ];
 
     /**

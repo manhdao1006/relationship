@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\OrderSuccess;
 use App\Events\PodcastProcessed;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/send-email', function () {
+
+    // event(new OrderSuccess());
+
+    OrderSuccess::dispatch(array('name' => "ABC"));
+
+    return view('welcome');
+});
 
 Route::get('/', function () {
 
