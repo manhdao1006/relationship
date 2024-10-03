@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\Event1;
+use App\Events\Event2;
 use App\Events\OrderSuccess;
 use App\Events\PodcastProcessed;
 use App\Http\Controllers\ProductController;
@@ -27,7 +29,8 @@ Route::get('/send-email', function () {
 
 Route::get('/', function () {
 
-    event(new PodcastProcessed('Hello'));
+    Event1::dispatch();
+    Event2::dispatch();
 
     return view('welcome');
 });
