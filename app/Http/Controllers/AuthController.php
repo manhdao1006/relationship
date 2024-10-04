@@ -10,12 +10,38 @@ class AuthController extends Controller
 {
     public function showFormLogin()
     {
-
+        return view('auth.login');
     }
 
     public function handleLogin()
     {
+        $credentials = request()->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
+        if (Auth::attempt($credentials))
+        {
+            request()->session()->regenerate();
+
+            /**
+             * @var User $user
+             */
+            $user = Auth::user();
+            if ($user->isAdmin())
+            {
+                return redirect()->route('admin.dashboard');
+            }
+
+            if ($user->isMember())
+            {
+                return redirect()->route('member.dashboard');
+            }
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 
     public function showFormRegister()
