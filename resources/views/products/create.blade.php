@@ -1,4 +1,4 @@
-@extends('master')
+@extends('layouts.master')
 
 @section('title')
     Create a New Product

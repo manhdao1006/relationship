@@ -1,9 +1,8 @@
 <?php
 
-use App\Events\Event1;
-use App\Events\Event2;
-use App\Events\OrderSuccess;
-use App\Events\PodcastProcessed;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,21 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/send-email', function () {
-
-    // event(new OrderSuccess());
-
-    OrderSuccess::dispatch(array('name' => "ABC"));
-
-    return view('welcome');
-});
-
 Route::get('/', function () {
-
-    Event1::dispatch();
-    Event2::dispatch();
-
     return view('welcome');
 });
 
 Route::resource('products', ProductController::class);
+
+Route::get('login', [AuthController::class, 'showFormLogin'])->name('login');
+Route::post('login', [AuthController::class, 'handleLogin']);
+
+Route::get('register', [AuthController::class, 'showFormRegister'])->name('register');
+Route::post('register', [AuthController::class, 'handleRegister']);
+
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('member', [MemberController::class, 'dashboard'])
+    ->name('member.dashboard')
+    ->middleware(['auth']);
+
+Route::get('admin', [AdminController::class, 'dashboard'])
+    ->name('admin.dashboard')
+    ->middleware(['auth']);

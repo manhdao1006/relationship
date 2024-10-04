@@ -1,1 +1,0 @@
-<h1>Hello {{ $name }}. Đây là email test</h1>
