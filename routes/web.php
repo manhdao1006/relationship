@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProductController;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsMember;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,8 +35,8 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('member', [MemberController::class, 'dashboard'])
     ->name('member.dashboard')
-    ->middleware(['auth']);
+    ->middleware(['auth', 'is_member']);
 
 Route::get('admin', [AdminController::class, 'dashboard'])
     ->name('admin.dashboard')
-    ->middleware(['auth']);
+    ->middleware(['auth', 'is_admin']);
